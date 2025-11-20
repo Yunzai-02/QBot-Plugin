@@ -19,45 +19,31 @@ export class Qcount extends plugin {
 
   async accept(e) {
     if (!Config.QBotSet.count || !this.isQQBot(e)) return false
-    const user = String(e.user_id).slice(-32) || String(e.user_id)
-    const group = String(e.group_id).slice(-32) || String(e.group_id)
-    const getUser = await DB.getID("user", user)
-    const getGroup = await DB.getID("group", group)
-    if (!getUser) {
-      await DB.setID("user", user)
-      const userCount = await this.getall("user")
-      let data = await Bot.pickMember(String(e.group_id), String(e.user_id)).getAvatarUrl(100)
-      if (!e.isGroup) data = await Bot.pickFriend(String(e.user_id)).getAvatarUrl(100)
-      const url = await data.replace(/\/0$/, "/100")
+    if (!(await DB.getUser(e.user_id, e.bot.uin))) {
+      await DB.addUser(e.user_id, e.bot.uin, e.user_id)
+      const userCount = await DB.getUserCount(e.bot.uin)
+      let avatarUrl = await Bot.pickMember(e.group_id, e.user_id).getAvatarUrl(100)
+      if (!e.isGroup) avatarUrl = await Bot.pickFriend(e.user_id).getAvatarUrl(100)
+      const url = await avatarUrl.replace(/\/0$/, "/100")
       const msg = [
+        QBot.quote(true),
         segment.image(url),
-        `${QBot.title(true)}欢迎`,
+        `${QBot.quote(true)}欢迎`,
         segment.at(e.user_id),
-        `！您是第${userCount}位使用${Config.QBotSet.name}的用户！`,
-        `${QBot.quote(true)}可以把${Config.QBotSet.name}邀请到任意群使用哦！`
+        `！您是第${userCount}位使用${e.bot.nickname}的用户！`,
+        `${QBot.quote(true)}可以把${e.bot.nickname}邀请到任意群使用哦！`
       ]
       await e.reply(msg)
     }
-    if (!getGroup && e.isGroup) {
-      await DB.setID("group", group)
-    }
+    if (e.isGroup && e.group_id && !(await DB.getGroup(e.group_id, e.bot.uin))) await DB.addGroup(e.group_id, e.bot.uin, e.group_id)
     return false
   }
 
   async all(e) {
-    const UserAll = await this.getall("user")
-    const GroupAll = await this.getall("group")
-    const msg = [
-      `${QBot.title(true)}📊 ${Config.QBotSet.name}统计: `,
-      `${QBot.quote(true)}用户: ${UserAll}`,
-      `${QBot.quote(true)}群组: ${GroupAll}`
-    ]
-    await e.reply([msg.join(""), new Buttons().QBot()])
-  }
-
-  async getall(type) {
-    const data = await DB.allID(type)
-    return data.length
+    const userCount = await DB.getUserCount(e.bot.uin)
+    const groupCount = await DB.getGroupCount(e.bot.uin)
+    const msg = [`${QBot.title(true)}📊 ${e.bot.nickname}统计`, QBot.quote(true), `用户: ${userCount}\r群组: ${groupCount}`]
+    await e.reply([...msg, new Buttons().QBot()])
   }
 
   isQQBot(e) {

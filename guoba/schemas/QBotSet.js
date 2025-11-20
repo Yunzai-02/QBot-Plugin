@@ -4,15 +4,6 @@ export default [
     label: "QBot配置"
   },
   {
-    field: "QBotSet.name",
-    label: "QBot名称",
-    required: true,
-    componentProps: {
-      placeholder: "请输入QBot名称"
-    },
-    component: "Input"
-  },
-  {
     field: "QBotSet.markdown",
     label: "markdown模式",
     componentProps: {

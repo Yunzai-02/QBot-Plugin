@@ -9,9 +9,6 @@ admin:
     指令正则
   reg: ([Qq]?[Bb]ot)
 QBotSet:
-  nameTips: |-
-    机器人名称
-  name: 小灵儿
   markdownTips: |-
     机器人Markdown模式
     1: md格式 | 2: json格式 | 默认为false

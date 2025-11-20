@@ -42,7 +42,7 @@ export default new (class Login {
           appType: data.appType,
           appId: data.appId
         }
-        await DB.setcookies(e.user_id, cookies.appId, cookies.uid, cookies.uin, cookies.ticket, cookies.developerId, cookies.appType)
+        await DB.setCookies(e.user_id, cookies.appId, cookies.uid, cookies.uin, cookies.ticket, cookies.developerId, cookies.appType)
         await redis.set(`QBot:${e.user_id}`, data.appId)
         return await e.reply([`${QBot.title(true)}登录成功`, `${QBot.quote(true)}AppID: ${data.appId}`, new Buttons().QBot()])
       }
@@ -54,11 +54,11 @@ export default new (class Login {
 
   async Login(e) {
     let appId = await redis.get(`QBot:${e.user_id}`)
-    let ck = await DB.getcookies(e.user_id, appId)
+    let ck = await DB.getCookies(e.user_id, appId)
     if (!ck || (ck && (await QBot.getdau(ck.uin, ck.developerId, ck.ticket, appId, 0)).retcode != 0)) {
       await this.login(e)
       appId = await redis.get(`QBot:${e.user_id}`)
-      ck = await DB.getcookies(e.user_id, appId)
+      ck = await DB.getCookies(e.user_id, appId)
     }
     return { ck, appId }
   }
