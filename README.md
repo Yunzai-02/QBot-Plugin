@@ -22,11 +22,6 @@
 <details>
   <summary>展开/收起</summary>
 
-#### ⚙️**获取令牌**
-
-- [Github](https://github.com/settings/tokens)
-- [Gitcode](https://gitcode.com/setting/token-classic)
-
 #### 🔧Yunzai 根目录执行命令安装
 
 - Github
@@ -39,7 +34,7 @@ git clone --depth=1 https://github.com/Lovely-02/QBot-Plugin.git ./plugins/QBot-
 > 如果你的网络环境较差，无法连接到 Github，可以使用 [02](https://github.com/Lovely-02) 提供的文件代理加速下载服务
 >
 > ```
-> git clone --depth=1 https://ghproxy.521002.xyz/https://github.com/Lovely-02/QBot-Plugin.git ./plugins/QBot-Plugin/
+> git clone --depth=1 https://ghproxy.521002.xyz/https://github.com/Yunzai-02/QBot-Plugin.git ./plugins/QBot-Plugin/
 > ```
 
 - Gitcode
