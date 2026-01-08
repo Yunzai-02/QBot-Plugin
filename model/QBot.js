@@ -1,8 +1,8 @@
-import { Config } from "#components"
+import { Config } from '#components'
 
 export default new (class QBot {
   constructor() {
-    this.api = "https://q.qq.com"
+    this.api = 'https://q.qq.com'
     this.bot = `https://bot.q.qq.com`
     this.login = `${this.api}/qrcode/create`
     this.qr = `${this.api}/qrcode/get`
@@ -18,7 +18,7 @@ export default new (class QBot {
 
   async getlogin(type, appId = null, uin, uid, ticket) {
     const json = await fetch(this.login, {
-      method: "POST",
+      method: 'POST',
       headers: this.getHeaders(uin, uid, ticket),
       body: JSON.stringify({ type: type, miniAppId: appId })
     })
@@ -29,7 +29,7 @@ export default new (class QBot {
 
   async getqrcode(qrcode) {
     const json = await fetch(this.qr, {
-      method: "POST",
+      method: 'POST',
       headers: this.getHeaders(),
       body: JSON.stringify({ qrcode: qrcode })
     })
@@ -39,7 +39,7 @@ export default new (class QBot {
 
   async getinfo(uin, uid, ticket) {
     const json = await fetch(this.info, {
-      method: "GET",
+      method: 'GET',
       headers: this.getHeaders(uin, uid, ticket)
     })
     const data = await json.json()
@@ -48,7 +48,7 @@ export default new (class QBot {
 
   async getnotice(uin, uid, ticket) {
     const json = await fetch(this.notice, {
-      method: "POST",
+      method: 'POST',
       headers: this.getHeaders(uin, uid, ticket),
       body: JSON.stringify({ page_num: 0, page_size: 10, receiver: uid, appType: 2 })
     })
@@ -58,7 +58,7 @@ export default new (class QBot {
 
   async getlists(uin, uid, ticket) {
     const json = await fetch(this.lists, {
-      method: "POST",
+      method: 'POST',
       headers: this.getHeaders(uin, uid, ticket),
       body: JSON.stringify({ uin: uin, developer_id: uid, ticket: ticket, app_type: [2] })
     })
@@ -68,7 +68,7 @@ export default new (class QBot {
 
   async getdau(uin, uid, ticket, appid, type) {
     const json = await fetch(`${this.dau}?bot_appid=${appid}&data_type=${type}&data_range=2&scene_id=1`, {
-      method: "GET",
+      method: 'GET',
       headers: this.getHeaders(uin, uid, ticket)
     })
     const data = await json.json()
@@ -77,7 +77,7 @@ export default new (class QBot {
 
   async getmsg_tpl(uin, uid, ticket, appid) {
     const json = await fetch(this.msg_tpl, {
-      method: "POST",
+      method: 'POST',
       headers: this.getHeaders(uin, uid, ticket),
       body: JSON.stringify({ bot_appid: appid, limit: 30 })
     })
@@ -87,7 +87,7 @@ export default new (class QBot {
 
   async getstatus(uin, uid, ticket) {
     const json = await fetch(this.status, {
-      method: "GET",
+      method: 'GET',
       headers: this.getHeaders(uin, uid, ticket)
     })
     const data = await json.json()
@@ -96,7 +96,7 @@ export default new (class QBot {
 
   async getwhlist(uin, uid, ticket, appid) {
     const json = await fetch(this.whlist, {
-      method: "POST",
+      method: 'POST',
       headers: this.getHeaders(uin, uid, ticket),
       body: JSON.stringify({ bot_appid: appid })
     })
@@ -106,7 +106,7 @@ export default new (class QBot {
 
   async updateip(uin, uid, ticket, appid, ip, qrocde) {
     const json = await fetch(this.upip, {
-      method: "POST",
+      method: 'POST',
       headers: this.getHeaders(uin, uid, ticket),
       body: JSON.stringify({
         bot_appid: appid,
@@ -120,26 +120,29 @@ export default new (class QBot {
 
   getHeaders(uin = null, uid = null, ticket = null) {
     const headers = {
-      "User-Agent": "request",
-      "Content-Type": "application/json",
+      'User-Agent': 'request',
+      'Content-Type': 'application/json',
       Cookie: `quin=${uin};quid=${uid};qticket=${ticket}`
     }
     return headers
   }
 
   title(md = false) {
-    return !Config.QBotSet.markdown ? "\r" : md || Config.QBotSet.markdown === 1 ? "\r#" : "\r"
+    return !Config.QBotSet.markdown ? '\r' : md || Config.QBotSet.markdown === 1 ? '\r###' : '\r'
   }
 
   quote(md = false) {
-    return !Config.QBotSet.markdown ? "\r" : md || Config.QBotSet.markdown === 1 ? "\r> " : "\r"
+    return !Config.QBotSet.markdown ? '\r' : md || Config.QBotSet.markdown === 1 ? '\r> ' : '\r'
   }
 
   json() {
-    return Config.QBotSet.markdown === 2 ? "\r```\r" : "\r"
+    return Config.QBotSet.markdown === 2 ? '\r```\r' : '\r'
+  }
+  sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms))
   }
 
-  sleep(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms))
+  isQQBot(e) {
+    return (e.bot?.adapter?.name || e.platform || '未知') === 'QQBot'
   }
 })()
