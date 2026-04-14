@@ -138,6 +138,7 @@ export default new (class QBot {
   json() {
     return Config.QBotSet.markdown === 2 ? '\r```\r' : '\r'
   }
+
   sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms))
   }
