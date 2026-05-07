@@ -64,8 +64,7 @@ export class Qupip extends plugin {
 		return e.reply(['授权失效', new Buttons().QBot()], true, { at: true, recallMsg: 60 })
 	}
 	async getip() {
-		const res = await fetch('https://api.521002.xyz/ip/')
-		const { data } = await res.json()
-		return data.ip
+		const ip = await (await fetch('https://ip.3322.net/')).text()
+		return ip.trim()
 	}
 }
