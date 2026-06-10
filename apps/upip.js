@@ -35,9 +35,9 @@ export class Qupip extends plugin {
 
 	async data(e, ck, appId, ip) {
 		const qr = await QBot.getlogin(51, appId, ck.uin, ck.developerId, ck.ticket)
-		const link = `https://q.qq.Com/qrcode/check?client=qq&code=${qr}&ticket=${ck.ticket}`
+		const link = `https://q.qq.com/qrcode/check?client=qq&code=${qr}&ticket=${ck.ticket}`
 		const msg = [
-			`${QBot.title(true)}QQ开放平台管理端授权`,
+			`${QBot.title(true)}🔐 QQ开放平台授权`,
 			`${QBot.quote(true)}授权具有时效性, 请尽快授权`,
 			`${QBot.quote(true)}当你选择授权`,
 			`${QBot.quote(true)}代表你已经同意将数据托管给${Config.QBotSet.name}Bot`,
@@ -51,18 +51,21 @@ export class Qupip extends plugin {
 			if (code == 0) {
 				let data = res.data.data
 				await QBot.updateip(ck.uin, ck.developerId, ck.ticket, appId, ip, qr)
+				const isMd = Config.QBotSet.markdown === 1
 				return await e.reply([
-					`${QBot.title(true)}${res.message}`,
-					`${QBot.quote(true)}授权人: ${data.uin}`,
-					`${QBot.quote(true)}已设置IP: ${ip}`,
+					`${QBot.title(true)}✅ ${res.message}`,
+					isMd
+						? `\r> 🔑 授权人：${data.uin}\r> 🌐 已设置IP：${QBot.bold(ip)}`
+						: `${QBot.quote(true)}🔑 授权人：${data.uin}\r${QBot.quote(true)}🌐 已设置IP：${ip}`,
 					new Buttons().QBot()
 				])
 			}
 			i++
 			await QBot.sleep(3000)
 		}
-		return e.reply(['授权失效', new Buttons().QBot()], true, { at: true, recallMsg: 60 })
+		return e.reply(['⏰ 授权失效', new Buttons().QBot()], true, { at: true, recallMsg: 60 })
 	}
+
 	async getip() {
 		const ip = await (await fetch('https://ip.3322.net/')).text()
 		return ip.trim()

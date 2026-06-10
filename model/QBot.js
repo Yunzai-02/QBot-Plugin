@@ -139,15 +139,26 @@ export default new (class QBot {
 	}
 
 	title(md = false) {
-		return !Config.QBotSet.markdown ? '\r' : md || Config.QBotSet.markdown === 1 ? '\r###' : '\r'
+		const mode = Config.QBotSet.markdown
+		if (!mode) return '\r'
+		if (md || mode === 1) return '\r### '
+		return '\r'
 	}
 
 	quote(md = false) {
-		return !Config.QBotSet.markdown ? '\r' : md || Config.QBotSet.markdown === 1 ? '\r> ' : '\r'
+		const mode = Config.QBotSet.markdown
+		if (!mode) return '\r'
+		if (md || mode === 1) return '\r> '
+		return '\r'
 	}
 
 	json() {
 		return Config.QBotSet.markdown === 2 ? '\r```\r' : '\r'
+	}
+
+	/** 标题后的内容（md模式用粗体，json模式用普通文本） */
+	bold(text) {
+		return Config.QBotSet.markdown === 1 ? `**${text}**` : text
 	}
 
 	sleep(ms) {
