@@ -20,7 +20,9 @@
   ],
   "author": "02",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "help-html": "^0.0.4"
+  },
   "imports": {
     "#components": "./components/index.js",
     "#model": "./model/index.js"
