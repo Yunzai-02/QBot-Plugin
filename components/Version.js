@@ -7,9 +7,6 @@ const README_path = `${Plugin_Path}/README.md`
 
 let PluginPackagePath = `${Plugin_Path}/package.json`
 let PluginPackageData = JSON.parse(fs.readFileSync(PluginPackagePath, "utf8"))
-let packageJson = JSON.parse(fs.readFileSync(`${process.cwd()}/package.json`, "utf8"))
-
-// let yunzai_ver = packageJson.version
 
 let changelogs = []
 let currentVersion
@@ -101,12 +98,7 @@ try {
           currentVersion = v
         } else {
           changelogs.push(temp)
-          if (/0\s*$/.test(v) && versionCount > 0) {
-            // versionCount = 0
-            versionCount--
-          } else {
-            versionCount--
-          }
+          versionCount--
         }
         temp = {
           version: v,
@@ -136,7 +128,6 @@ try {
   }
 } catch (e) {
   logger.error(e)
-  // do nth
 }
 
 try {
@@ -151,22 +142,20 @@ try {
 
 try {
   if (PluginPackageData.version !== currentVersion) {
-    console.log(`[QBot-Plugin] 版本号不一致，更新版本号为: ${currentVersion}`)
     PluginPackageData.version = currentVersion
 
     fs.writeFileSync(PluginPackagePath, JSON.stringify(PluginPackageData, null, 2), "utf8")
-    console.log("[QBot-Plugin] package.json 已更新")
   }
 } catch (error) {
   console.error("读取或解析 package.json 出现错误:", error)
 }
 
 let { author } = PluginPackageData
+let packageJson = JSON.parse(fs.readFileSync(`${process.cwd()}/package.json`, "utf8"))
 const yunzaiVersion = packageJson.version
-let name = "Yunzai-Bot"
 
 let Version = {
-  name,
+  name: "Yunzai-Bot",
   author,
   get version() {
     return currentVersion
@@ -184,3 +173,6 @@ let Version = {
 }
 
 export default Version
+
+
+
