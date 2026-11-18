@@ -14,7 +14,7 @@ QBotSet:
     1: md格式 | 2: json格式 | 默认为false
   markdown: 0
   arkloginTips: |-
-    登录是否使用ark
+    登录是否使用卡片
   arklogin: true
   dayTips: |-
     最近几天活跃
